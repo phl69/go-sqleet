@@ -32,6 +32,14 @@ func (c *SQLiteConn) Rekey(key []byte) (err error) {
 	return
 }
 
+func (c *SQLiteConn) Dekey(key []byte) (err error) {
+	retval := C.sqlite3_rekey(c.db, unsafe.Pointer(&key[0]), C.int(0))
+	if retval != C.SQLITE_OK {
+		err = c.lastError()
+	}
+	return
+}
+
 // conn := &SQLiteConn{db: db, loc: loc, txlock: txlock}
 func (d *SQLiteDriver) createConn(
 	dsnParams url.Values,
